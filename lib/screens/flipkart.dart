@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
+import '../search_modal.dart';
+
 class Flipkart extends StatefulWidget {
   const Flipkart({super.key});
 
@@ -11,6 +13,8 @@ class Flipkart extends StatefulWidget {
 class _FlipkartState extends State<Flipkart> {
   late WebViewController _webviewController;
   bool _loading = true;
+
+  TextEditingController searchController = TextEditingController();
 
   @override
   void initState() {
@@ -30,8 +34,6 @@ class _FlipkartState extends State<Flipkart> {
             setState(() {
               _loading = false;
             });
-
-            _autoFillSearch();
           },
           onHttpError: (HttpResponseError error) {},
           onWebResourceError: (WebResourceError error) {},
@@ -46,31 +48,17 @@ class _FlipkartState extends State<Flipkart> {
       ..loadRequest(Uri.parse('https://www.flipkart.com/'));
   }
 
-  void _autoFillSearch() async {
-    // JavaScript to click the search area or button if applicable
-    await _webviewController.runJavaScript(
-        "document.querySelector('div[class*=\"css-1rynq56\"]').click();");
+  // void _searchRequest() {
+  //   const String searchQuery = "iphone";
+  //   final String searchURL =
+  //       Uri.encodeFull("https://www.flipkart.com/search?q=$searchQuery");
+  //   _webviewController.loadRequest(Uri.parse(searchURL));
+  // }
 
-    // Give the page a moment to respond to the click
-    await Future.delayed(Duration(seconds: 1));
-
-    // await _webviewController.runJavaScript(
-    //     "document.querySelector('a[class*=\"_1je_xh\"]').click();");
-
-    // await Future.delayed(Duration(seconds: 1));
-
-    // Enter 'iphone' in the search bar
-    await _webviewController.runJavaScript("""
-      const inputField = document.querySelector('input[type=\"search\"]');
-      inputField.value = 'iphone';
-      inputField.dispatchEvent(new Event('input', { bubbles: true }));
-      document.querySelector('form').submit(); 
-    """);
-    await Future.delayed(Duration(seconds: 1));
-
-    // Trigger the form submission by simulating an Enter key press
-    // await _webviewController.runJavaScript(
-    //     "searchBar.dispatchEvent(new KeyboardEvent('keypress', {'key': 'Enter'}));");
+  void _searchForQuery(String query) {
+    final searchUrl =
+        Uri.encodeFull('https://www.flipkart.com/search?q=$query');
+    _webviewController.loadRequest(Uri.parse(searchUrl));
   }
 
   @override
@@ -87,7 +75,13 @@ class _FlipkartState extends State<Flipkart> {
         centerTitle: true,
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () {
+          showSearchModal(
+            searchQuery: () => _searchForQuery(searchController.text),
+            context: context,
+            searchController: searchController,
+          );
+        },
         child: const Text("AI"),
       ),
       body: Stack(children: [

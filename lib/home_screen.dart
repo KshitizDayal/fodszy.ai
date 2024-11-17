@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:fodzsy_ai/screens/amazon.dart';
+import 'package:fodzsy_ai/screens/bigbasket.dart';
 import 'package:fodzsy_ai/screens/blinkit.dart';
 import 'package:fodzsy_ai/screens/flipkart.dart';
+import 'package:fodzsy_ai/screens/tata1mg.dart';
 import 'package:fodzsy_ai/screens/zepto.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -65,7 +68,7 @@ class HomeScreen extends StatelessWidget {
                   ),
                 ],
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 40),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
@@ -75,6 +78,42 @@ class HomeScreen extends StatelessWidget {
                     onTap: () {
                       Navigator.of(context).push(MaterialPageRoute(
                           builder: (context) => const Zepto()));
+                    },
+                  ),
+                  imageColumn(
+                    imageUrl: "assets/images/tata1mg.png",
+                    text: "Tata 1mg",
+                    onTap: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => const Tata1mg(),
+                        ),
+                      );
+                    },
+                  ),
+                ],
+              ),
+              const SizedBox(height: 40),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  imageColumn(
+                    imageUrl: "assets/images/amazon.png",
+                    text: "Amazon",
+                    onTap: () {
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => const Amazon()));
+                    },
+                  ),
+                  imageColumn(
+                    imageUrl: "assets/images/bigbasket.jpeg",
+                    text: "BigBasket",
+                    onTap: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => const BigBasket(),
+                        ),
+                      );
                     },
                   ),
                 ],

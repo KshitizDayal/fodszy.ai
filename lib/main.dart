@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:fodzsy_ai/screens/home_screen.dart';
+import 'package:fodzsy_ai/home_screen.dart';
 
 void main() {
   runApp(const MyApp());

@@ -3,16 +3,17 @@ import 'package:webview_flutter/webview_flutter.dart';
 
 import '../search_modal.dart';
 
-class Zepto extends StatefulWidget {
-  const Zepto({super.key});
+class Amazon extends StatefulWidget {
+  const Amazon({super.key});
 
   @override
-  State<Zepto> createState() => _ZeptoState();
+  State<Amazon> createState() => _AmazonState();
 }
 
-class _ZeptoState extends State<Zepto> {
+class _AmazonState extends State<Amazon> {
   late WebViewController _webviewController;
   bool _loading = true;
+
   TextEditingController searchController = TextEditingController();
 
   @override
@@ -37,19 +38,15 @@ class _ZeptoState extends State<Zepto> {
           onHttpError: (HttpResponseError error) {},
           onWebResourceError: (WebResourceError error) {},
           onNavigationRequest: (NavigationRequest request) {
-            if (request.url.startsWith('https://www.youtube.com/')) {
-              return NavigationDecision.prevent;
-            }
             return NavigationDecision.navigate;
           },
         ),
       )
-      ..loadRequest(Uri.parse('https://www.zeptonow.com/'));
+      ..loadRequest(Uri.parse('https://www.amazon.in/'));
   }
 
   void _searchForQuery(String query) {
-    final searchUrl =
-        Uri.encodeFull('https://www.zeptonow.com/search?query=$query');
+    final searchUrl = Uri.encodeFull('https://www.amazon.in/s?k=$query');
     _webviewController.loadRequest(Uri.parse(searchUrl));
   }
 
@@ -81,9 +78,5 @@ class _ZeptoState extends State<Zepto> {
         if (_loading) const Center(child: CircularProgressIndicator())
       ]),
     );
-  }
-
-  Widget openAIassistant() {
-    return Container();
   }
 }

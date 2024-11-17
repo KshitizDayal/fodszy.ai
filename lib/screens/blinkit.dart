@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
+import '../search_modal.dart';
+
 class Blinkit extends StatefulWidget {
   const Blinkit({super.key});
 
@@ -11,6 +13,8 @@ class Blinkit extends StatefulWidget {
 class _BlinkitState extends State<Blinkit> {
   late WebViewController _webviewController;
   bool _loading = true;
+
+  TextEditingController searchController = TextEditingController();
 
   @override
   void initState() {
@@ -30,8 +34,6 @@ class _BlinkitState extends State<Blinkit> {
             setState(() {
               _loading = false;
             });
-
-            _autoFillSearch();
           },
           onHttpError: (HttpResponseError error) {},
           onWebResourceError: (WebResourceError error) {},
@@ -46,52 +48,9 @@ class _BlinkitState extends State<Blinkit> {
       ..loadRequest(Uri.parse('https://blinkit.com/'));
   }
 
-  // void _autoFillSearch() async {
-  //   // Assuming the search input can be identified and manipulated directly
-  //   await _webviewController.runJavaScript(
-  //     "document.getElementsByClassName('SearchBar__PlaceholderContainer-sc-16lps2d-0')[0].click();",
-  //   );
-  //   await Future.delayed(
-  //       Duration(seconds: 1)); // Give time for the search field to respond
-  //   await _webviewController.runJavaScript(
-  //       "document.querySelector('.SearchBarContainer__Input-sc-hl8pft-3').value = 'milk';");
-  //   // _simulateEnterKeyPress();
-  //   // Optionally, trigger an 'input' event if the website uses it to detect changes
-  //   await _webviewController.runJavaScript('''
-  //     var inputEvent = new Event('input', { bubbles: true });
-  //     document.querySelector('.SearchBarContainer__Input-sc-hl8pft-3').dispatchEvent(inputEvent);
-  //   ''');
-  //   // Delay to ensure any JavaScript or animations have completed
-  //   await Future.delayed(Duration(seconds: 1));
-  // }}
-
-  void _autoFillSearch() async {
-    // Click to activate the search field
-    await _webviewController.runJavaScript(
-      "document.getElementsByClassName('SearchBar__PlaceholderContainer-sc-16lps2d-0')[0].click();",
-    );
-    await Future.delayed(
-        Duration(seconds: 1)); // Give time for the search field to respond
-
-    // Simulate typing 'milk'
-    const searchTerm = 'milk';
-    for (int i = 0; i <= searchTerm.length; i++) {
-      String currentInput = searchTerm.substring(0, i);
-      await _webviewController.runJavaScript(
-          "document.querySelector('.SearchBarContainer__Input-sc-hl8pft-3').value = '$currentInput';");
-
-      // Trigger input and keyup events
-      await _webviewController.runJavaScript('''
-      var inputField = document.querySelector('.SearchBarContainer__Input-sc-hl8pft-3');
-      var inputEvent = new Event('input', { bubbles: true });
-      var keyupEvent = new KeyboardEvent('keyup', { key: '${i < searchTerm.length ? searchTerm[i] : ''}', bubbles: true });
-      inputField.dispatchEvent(inputEvent);
-      inputField.dispatchEvent(keyupEvent);
-    ''');
-
-      // Short delay to mimic typing speed
-      await Future.delayed(Duration(milliseconds: 100));
-    }
+  void _searchForQuery(String query) {
+    final searchUrl = Uri.encodeFull('https://www.blinkit.com/search?q=$query');
+    _webviewController.loadRequest(Uri.parse(searchUrl));
   }
 
   @override
@@ -108,7 +67,13 @@ class _BlinkitState extends State<Blinkit> {
         centerTitle: true,
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () {
+          showSearchModal(
+            searchQuery: () => _searchForQuery(searchController.text),
+            context: context,
+            searchController: searchController,
+          );
+        },
         child: const Text("AI"),
       ),
       body: Stack(children: [

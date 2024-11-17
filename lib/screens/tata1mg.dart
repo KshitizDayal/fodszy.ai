@@ -3,16 +3,17 @@ import 'package:webview_flutter/webview_flutter.dart';
 
 import '../search_modal.dart';
 
-class Zepto extends StatefulWidget {
-  const Zepto({super.key});
+class Tata1mg extends StatefulWidget {
+  const Tata1mg({super.key});
 
   @override
-  State<Zepto> createState() => _ZeptoState();
+  State<Tata1mg> createState() => _Tata1mgState();
 }
 
-class _ZeptoState extends State<Zepto> {
+class _Tata1mgState extends State<Tata1mg> {
   late WebViewController _webviewController;
   bool _loading = true;
+
   TextEditingController searchController = TextEditingController();
 
   @override
@@ -37,19 +38,16 @@ class _ZeptoState extends State<Zepto> {
           onHttpError: (HttpResponseError error) {},
           onWebResourceError: (WebResourceError error) {},
           onNavigationRequest: (NavigationRequest request) {
-            if (request.url.startsWith('https://www.youtube.com/')) {
-              return NavigationDecision.prevent;
-            }
             return NavigationDecision.navigate;
           },
         ),
       )
-      ..loadRequest(Uri.parse('https://www.zeptonow.com/'));
+      ..loadRequest(Uri.parse('https://www.1mg.com/'));
   }
 
   void _searchForQuery(String query) {
     final searchUrl =
-        Uri.encodeFull('https://www.zeptonow.com/search?query=$query');
+        Uri.encodeFull('https://www.1mg.com/search/all?name=$query');
     _webviewController.loadRequest(Uri.parse(searchUrl));
   }
 
@@ -81,9 +79,5 @@ class _ZeptoState extends State<Zepto> {
         if (_loading) const Center(child: CircularProgressIndicator())
       ]),
     );
-  }
-
-  Widget openAIassistant() {
-    return Container();
   }
 }

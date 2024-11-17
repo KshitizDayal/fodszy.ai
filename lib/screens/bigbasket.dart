@@ -3,16 +3,17 @@ import 'package:webview_flutter/webview_flutter.dart';
 
 import '../search_modal.dart';
 
-class Zepto extends StatefulWidget {
-  const Zepto({super.key});
+class BigBasket extends StatefulWidget {
+  const BigBasket({super.key});
 
   @override
-  State<Zepto> createState() => _ZeptoState();
+  State<BigBasket> createState() => _BigBasketState();
 }
 
-class _ZeptoState extends State<Zepto> {
+class _BigBasketState extends State<BigBasket> {
   late WebViewController _webviewController;
   bool _loading = true;
+
   TextEditingController searchController = TextEditingController();
 
   @override
@@ -44,12 +45,11 @@ class _ZeptoState extends State<Zepto> {
           },
         ),
       )
-      ..loadRequest(Uri.parse('https://www.zeptonow.com/'));
+      ..loadRequest(Uri.parse('https://www.bigbasket.com/'));
   }
 
   void _searchForQuery(String query) {
-    final searchUrl =
-        Uri.encodeFull('https://www.zeptonow.com/search?query=$query');
+    final searchUrl = Uri.encodeFull('https://www.bigbasket.com/ps/?q=$query');
     _webviewController.loadRequest(Uri.parse(searchUrl));
   }
 
@@ -81,9 +81,5 @@ class _ZeptoState extends State<Zepto> {
         if (_loading) const Center(child: CircularProgressIndicator())
       ]),
     );
-  }
-
-  Widget openAIassistant() {
-    return Container();
   }
 }
